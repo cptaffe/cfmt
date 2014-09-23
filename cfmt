@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# 1. takes in filename to format with astyle
+# 2. creates tmp folder to output files
+# 3. moves files in tmp folder to current folder
+# 4. removes tmp folder
+
+TMP=/tmp/astyle-fmt/
+
+mkdir -p $TMP
+
+for f in $@
+do
+	mkdir -p $TMP"$(dirname "$f")"
+	astyle < $f > $TMP$f
+	mv $TMP$f $f
+done
+rm -rf $TMP
