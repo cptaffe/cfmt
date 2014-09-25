@@ -13,6 +13,8 @@ def comment(fl):
 			if i < len(l) - 1 and c == '/' and l[i+1] == '/':
 				if l[:i].isspace():
 					pline = l[:i]
+				elif len(l[:i]) == 0:
+					pline = ""
 				else:
 					pline = l[:i].rstrip() + ' '
 				line = pline + '// ' + l[i+2:].strip() + '\n'
