@@ -25,6 +25,7 @@ for f in $@
 do
 	mkdir -p $TMP"$(dirname "$f")" # create dirs in tmp
 	astyle $OPT < $f > $TMP$f # fmt files
+	ERR=$? # preserve in ERR
 
 	# This is how you add optional scripts.
 	# Put them in the "scripts" directory where this script
@@ -35,20 +36,22 @@ do
 	# 1. All scripts should read from stdin and write to stdout.
 	# 2. An error should be reported through a non-zero exit code.
 
-	if [ $? == 0 ]
+	if [ $ERR == 0 ]
 		then
 		SCRIPT="comment" # name of the script
 		PARAMS=" " # parameters the script takes, precede with space
 		$SCRIPT_DIR/$SCRIPT$PARAMS < $TMP$f > $TMP$f.tmp # fmt comments
+		ERR=$? # preserve in ERR
 		mv $TMP$f.tmp $TMP$f
 	fi
 
-	if [ $? == 0 ]
+	if [ $ERR == 0 ]
 		then
 			mv $TMP$f $f # overwrite local with fmt'd copy
 		else
 			echo "error: no files were altered."
-			break # exits loop
+			break
 	fi
 done
 rm -rf $TMP # remove tmp file
+exit $?
