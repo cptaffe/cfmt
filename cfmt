@@ -32,6 +32,9 @@ do
 	# this one, assigning your script's name to $SCRIPT and your script's
 	# parameters to $PARAMS.
 
+	# 1. All scripts should read from stdin and write to stdout.
+	# 2. An error should be reported through a non-zero exit code.
+
 	if [ $? == 0 ]
 		then
 		SCRIPT="comment" # name of the script
