@@ -25,8 +25,7 @@ do
 	mkdir -p $TMP"$(dirname "$f")" # create dirs in tmp
 	astyle $OPT < $f > $TMP$f # fmt files
 	$DIR/comment < $TMP$f > $TMP$f.tmp # fmt comments
-	cp $TMP$f.tmp $TMP$f
-	rm $TMP$f.tmp
+	mv $TMP$f.tmp $TMP$f
 	if [ $? == 0 ]
 		then
 			mv $TMP$f $f # overwrite local with fmt'd copy
