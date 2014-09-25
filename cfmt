@@ -9,12 +9,24 @@ TMP="/tmp/astyle-fmt/"
 
 OPT="--recursive --lineend=linux --style=attach --delete-empty-lines --align-pointer=name --align-reference=name --unpad-paren --pad-header --pad-oper --break-blocks --indent-switches --indent-cases --indent-labels --indent=force-tab --add-one-line-brackets --indent-col1-comments --delete-empty-lines --break-after-logical"
 
+# find source dir
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+done
+DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+
 mkdir -p $TMP # create tmp file
 
 for f in $@
 do
 	mkdir -p $TMP"$(dirname "$f")" # create dirs in tmp
 	astyle $OPT < $f > $TMP$f # fmt files
+	$DIR/comment < $TMP$f > $TMP$f.tmp # fmt comments
+	cp $TMP$f.tmp $TMP$f
+	rm $TMP$f.tmp
 	if [ $? == 0 ]
 		then
 			mv $TMP$f $f # overwrite local with fmt'd copy
