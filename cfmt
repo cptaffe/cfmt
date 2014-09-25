@@ -17,6 +17,7 @@ while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symli
   [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+SCRIPT_DIR=$DIR"/scripts" # helper scripts.
 
 mkdir -p $TMP # create tmp file
 
@@ -24,8 +25,21 @@ for f in $@
 do
 	mkdir -p $TMP"$(dirname "$f")" # create dirs in tmp
 	astyle $OPT < $f > $TMP$f # fmt files
-	$DIR/comment < $TMP$f > $TMP$f.tmp # fmt comments
-	mv $TMP$f.tmp $TMP$f
+
+	# This is how you add optional scripts.
+	# Put them in the "scripts" directory where this script
+	# is stored, then copy the following if block and place it after
+	# this one, assigning your script's name to $SCRIPT and your script's
+	# parameters to $PARAMS.
+
+	if [ $? == 0 ]
+		then
+		SCRIPT="comment" # name of the script
+		PARAMS=" " # parameters the script takes, precede with space
+		$SCRIPT_DIR/$SCRIPT$PARAMS < $TMP$f > $TMP$f.tmp # fmt comments
+		mv $TMP$f.tmp $TMP$f
+	fi
+
 	if [ $? == 0 ]
 		then
 			mv $TMP$f $f # overwrite local with fmt'd copy
