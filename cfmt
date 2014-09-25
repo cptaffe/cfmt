@@ -7,7 +7,7 @@
 
 TMP="/tmp/astyle-fmt/"
 
-OPT="--recursive --lineend=linux --style=attach --delete-empty-lines --align-pointer=name --align-reference=name --unpad-paren --pad-header --pad-oper --break-blocks --indent-switches --indent-cases --indent-labels --indent=force-tab --add-one-line-brackets --indent-col1-comments --delete-empty-lines --break-after-logical"
+OPT="--recursive --lineend=linux --style=attach --delete-empty-lines --align-pointer=name --align-reference=name --unpad-paren --pad-header --pad-oper --break-blocks --indent-switches --indent-cases --indent-labels --indent=force-tab --add-one-line-brackets --indent-col1-comments --delete-empty-lines"
 
 # find source dir
 SOURCE="${BASH_SOURCE[0]}"
